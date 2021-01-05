@@ -1,10 +1,17 @@
 #include "mbed.h"
 
-// main() runs in its own thread in the OS
-int main()
-{
-    while (true) {
-
+InterruptIn button(PA_12);
+DigitalOut led(LED1);
+DigitalOut flash(LED4);
+ 
+void flip() {
+    led = !led;
+}
+ 
+int main() {
+    button.rise(&flip);  // attach the address of the flip function to the rising edge
+    while(1) {           // wait around, interrupts will interrupt this!
+        flash = !flash;
+       ThisThread::sleep_for(chrono::milliseconds(25));
     }
 }
-
